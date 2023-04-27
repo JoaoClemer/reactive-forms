@@ -1,0 +1,63 @@
+
+<form class="row g-3" [formGroup]="formulario" (ngSubmit)="OnSubmit()">
+  <div class="col-md-12">
+    <label for="nome">Nome</label>
+    <input type="text" class="form-control" id="nome" placeholder="Nome" formControlName="nome">
+  </div>
+
+  <div class="col-md-12">
+    <label for="email">Email</label>
+    <input type="email" class="form-control" id="email" placeholder="nome@email.com" formControlName="email">
+  </div>
+
+
+  <div formGroupName="endereco">
+    <div class="col-md-3">
+      <label for="cep" >CEP</label>
+      <input class="form-control" type="text" name="cep" id="cep" formControlName="cep" (blur)="consultaCep()">
+    </div>
+
+
+    <div class="col-md-3">
+      <label for="numero">Número</label>
+      <input class="form-control" type="number" name="numero" id="numero" formControlName="numero">
+    </div>
+
+
+    <div class="col-md-6">
+      <label for="complemento">Complemento</label>
+      <input class="form-control" type="text" name="complemento" id="complemento" formControlName="complemento">
+    </div>
+
+    <div class="col-md-12">
+      <label for="nome">Rua</label>
+      <input type="text" class="form-control" id="rua" name="rua" formControlName="rua">
+    </div>
+
+    <div class="col-md-5">
+      <label for="complemento">Bairro</label>
+      <input class="form-control" type="text" name="bairro" id="bairro" formControlName="bairro">
+    </div>
+
+    <div class="col-md-4">
+      <label for="complemento">Cidade</label>
+      <input class="form-control" type="text" name="Cidade" id="Cidade" formControlName="cidade">
+    </div>
+
+    <div class="col-md-3">
+      <label for="complemento">Estado</label>
+      <input class="form-control" type="text" name="estado" id="estado" formControlName="estado">
+    </div>
+  </div>
+
+
+  <div class="col-12">
+    <button type="submit" class="btn btn-primary">Sign in</button>
+    <button class="btn btn-dark" (click)="limpar()">Clear</button>
+  </div>
+
+
+
+</form>
+
+
