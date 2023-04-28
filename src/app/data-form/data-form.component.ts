@@ -1,6 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DropdownService } from '../services/dropdown.service';
+import { EstadoBr } from './models/estado-br';
+import { ConsultaCepService } from '../services/consulta-cep.service';
 
 @Component({
   selector: 'app-data-form',
@@ -10,14 +13,21 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class DataFormComponent implements OnInit {
 
   formulario!: FormGroup;
+  estados!: EstadoBr[];
 
-  constructor(private formBuilder: FormBuilder,
-    private http: HttpClient){
+  constructor
+  (private formBuilder: FormBuilder,
+    private http: HttpClient,
+    private dropdownService: DropdownService,
+    private cepService: ConsultaCepService){
 
   }
 
 
   ngOnInit(){
+
+    this.dropdownService.getEstadosBr()
+    .subscribe(dados=>this.estados = dados);
 
     /*this.furmulario = new FormGroup({
       nome: new FormControl(null),
@@ -65,11 +75,10 @@ export class DataFormComponent implements OnInit {
 
     }else{
 
-      Object.keys(this.formulario['controls']).forEach(campo =>{
+      Object.keys(this.formulario.controls).forEach(campo =>{
         console.log(campo);
 
-        const controle = this.formulario.get(campo);
-        controle?.markAllAsTouched;
+        this.formulario.get(campo)?.markAllAsTouched();
 
 
       })
@@ -85,20 +94,10 @@ export class DataFormComponent implements OnInit {
 
     let cep = this.formulario.get('endereco.cep')?.value;
 
-    cep = cep.replace(/\D/g, '');
 
-    if(cep != ""){
-
-      var validacep = /^[0-9]{8}$/;
-
-      if(validacep.test(cep)){
-
-        this.http.get(`//viacep.com.br/ws/${cep}/json`)
-        .subscribe(dados => this.populaDadosForm(dados));
-
-
-      }
-
+    if(cep != null && cep !== ''){
+      this.cepService.consultaCep(cep)
+      ?.subscribe(dados=>this.populaDadosForm(dados));
     }
 
   }
