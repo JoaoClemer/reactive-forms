@@ -24,5 +24,20 @@ export class DropdownService {
     ];
   }
 
+  getTecnologias(){
+    return [
+      {nome: 'java', desc: 'Java'},
+      {nome: 'javascript', desc: 'JavaScript'},
+      {nome: 'C#', desc: '#C'},
+      {nome: 'ruby', desc: 'Ruby'},
+    ]
+  }
+
+  getNewsletter(){
+    return[
+      {valor: 's', desc: 'Sim'},
+      {valor: 'n', desc: 'Não'}
+    ]
+  }
 
 }
