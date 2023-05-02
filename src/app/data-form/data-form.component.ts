@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DropdownService } from '../services/dropdown.service';
 import { EstadoBr } from './models/estado-br';
 import { ConsultaCepService } from '../services/consulta-cep.service';
 import { Observable } from 'rxjs';
+import { FormValidators } from './form-validators';
 
 @Component({
   selector: 'app-data-form',
@@ -57,7 +58,7 @@ export class DataFormComponent implements OnInit {
       ]],
 
       endereco: this.formBuilder.group({
-         cep:[null, Validators.required],
+         cep:[null, [Validators.required, FormValidators.cepValidator]],
       numero:[null, Validators.required],
       complemento:[null],
       rua:[null, Validators.required],
@@ -68,7 +69,9 @@ export class DataFormComponent implements OnInit {
 
       cargo: [null],
       tecnologias: [null],
-      newsletter: [null]
+      newsletter: [null],
+      termos: [null, Validators.pattern('true')],
+
 
     });
 
@@ -93,6 +96,10 @@ export class DataFormComponent implements OnInit {
         console.log(campo);
 
         this.formulario.get(campo)?.markAllAsTouched();
+
+        if(this.formulario.get('termos')?.value == null){
+          this.formulario.get('termos')?.setValue(false);
+        }
 
 
       })
