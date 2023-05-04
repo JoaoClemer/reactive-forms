@@ -1,10 +1,11 @@
+import { VerificaEmailService } from '../services/verifica-email.service';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DropdownService } from '../services/dropdown.service';
 import { EstadoBr } from './models/estado-br';
 import { ConsultaCepService } from '../services/consulta-cep.service';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { FormValidators } from './form-validators';
 
 @Component({
@@ -25,12 +26,15 @@ export class DataFormComponent implements OnInit {
   (private formBuilder: FormBuilder,
     private http: HttpClient,
     private dropdownService: DropdownService,
-    private cepService: ConsultaCepService){
+    private cepService: ConsultaCepService,
+    private _verificaEmail: VerificaEmailService){
 
   }
 
 
   ngOnInit(){
+
+    //this._verificaEmail.verificarEmail('email1@email.com').subscribe();
 
     this.estados = this.dropdownService.getEstadosBr();
 
@@ -55,7 +59,11 @@ export class DataFormComponent implements OnInit {
       email: [null, [
         Validators.required,
         Validators.email
+      ], this.validarEmail.bind(this)],
+       confirmarEmail: [null, [
+        FormValidators.equalsTo('email')
       ]],
+
 
       endereco: this.formBuilder.group({
          cep:[null, [Validators.required, FormValidators.cepValidator]],
@@ -148,6 +156,11 @@ export class DataFormComponent implements OnInit {
   setarTecnologias(){
     this.formulario.get('tecnologias')?.setValue(['java', 'javascript', 'ruby']);
 
+  }
+
+  validarEmail(formControl:FormControl){
+    return this._verificaEmail.verificarEmail(formControl.value)
+    .pipe(map(emailExiste => emailExiste ? {emailInvalido:true}:null));
   }
 
   }
